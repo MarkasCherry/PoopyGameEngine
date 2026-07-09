@@ -30,6 +30,13 @@ return [
 
     'disks' => [
 
+        'games' => [
+            'driver' => 'local',
+            'root' => storage_path('app/games'),
+            'serve' => false,
+            'throw' => true,
+        ],
+
         'local' => [
             'driver' => 'local',
             'root' => storage_path('app/private'),
