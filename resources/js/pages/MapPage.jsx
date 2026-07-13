@@ -314,7 +314,7 @@ function FlowEdges({ edges, rects, busX }) {
         <svg className="pointer-events-none absolute z-10 overflow-visible" width="1" height="1">
             <defs>
                 <marker id="arrow-seq" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto">
-                    <path d="M0,0 L8,4 L0,8 z" fill="#a78bfa" />
+                    <path d="M0,0 L8,4 L0,8 z" fill="#7b86f5" />
                 </marker>
                 <marker id="arrow-choice" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="7" markerHeight="7" orient="auto">
                     <path d="M0,0 L8,4 L0,8 z" fill="#fbbf24" />

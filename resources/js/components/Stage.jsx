@@ -103,7 +103,7 @@ export default function Stage({ gameId, draft, node, characters, resolvedBackgro
                                             onClick={() => addSprite(c.id)}
                                             className="flex w-full cursor-pointer items-center gap-2 rounded-lg px-3 py-2 text-left text-sm text-white transition hover:bg-white/10"
                                         >
-                                            <span className="size-2 rounded-full" style={{ background: c.text_color ?? '#8b5cf6' }} />
+                                            <span className="size-2 rounded-full" style={{ background: c.text_color ?? '#5865f2' }} />
                                             {c.name}
                                         </button>
                                     ))}
@@ -214,7 +214,7 @@ function StageSprite({ sprite, characters, stageRef, selected, onSelect, onChang
                         style={{
                             transform: sprite.flip ? 'scaleX(-1)' : undefined,
                             filter: selected
-                                ? 'drop-shadow(0 0 14px rgba(217,70,239,0.65)) drop-shadow(0 8px 24px rgba(0,0,0,0.5))'
+                                ? 'drop-shadow(0 0 14px rgba(88,101,242,0.65)) drop-shadow(0 8px 24px rgba(0,0,0,0.5))'
                                 : 'drop-shadow(0 8px 24px rgba(0,0,0,0.5))',
                         }}
                     />
@@ -246,7 +246,7 @@ function StageSprite({ sprite, characters, stageRef, selected, onSelect, onChang
                         <IconButton title="Remove from stage" className="!size-6 text-xs hover:!bg-rose-500/25 hover:!text-rose-200" onClick={onRemove}>✕</IconButton>
                     </div>
                     <div
-                        className="absolute -top-2 -right-2 z-30 size-4 cursor-ns-resize touch-none rounded-full border-2 border-white bg-fuchsia-500 shadow-[0_0_10px_rgba(217,70,239,0.8)]"
+                        className="absolute -top-2 -right-2 z-30 size-4 cursor-ns-resize touch-none rounded-full border-2 border-white bg-fuchsia-500 shadow-[0_0_10px_rgba(88,101,242,0.8)]"
                         title="Drag to resize"
                         onPointerDown={(e) => startDrag(e, 'resize')}
                         onPointerMove={onMove}
@@ -292,7 +292,7 @@ function DialogueOverlay({ draft, characters, patchData }) {
                                 onClick={() => { patchData({ character_id: c.id, appearance_id: null }); setPickingSpeaker(false); }}
                                 className="flex w-full cursor-pointer items-center gap-2 rounded-lg px-3 py-2 text-left text-sm text-white transition hover:bg-white/10"
                             >
-                                <span className="size-2 rounded-full" style={{ background: c.text_color ?? '#8b5cf6' }} />
+                                <span className="size-2 rounded-full" style={{ background: c.text_color ?? '#5865f2' }} />
                                 {c.name}
                             </button>
                         ))}
@@ -317,10 +317,10 @@ function DialogueOverlay({ draft, characters, patchData }) {
                             className="flex-1 bg-transparent text-xs text-violet-200 placeholder:text-white/25 outline-none"
                         />
                         <label className="relative size-5 shrink-0 cursor-pointer overflow-hidden rounded-md border border-white/20" title="Speaker color">
-                            <span className="absolute inset-0" style={{ background: draft.data.speaker_color ?? '#c4b5fd' }} />
+                            <span className="absolute inset-0" style={{ background: draft.data.speaker_color ?? '#aeb6fb' }} />
                             <input
                                 type="color"
-                                value={draft.data.speaker_color ?? '#c4b5fd'}
+                                value={draft.data.speaker_color ?? '#aeb6fb'}
                                 onChange={(e) => patchData({ speaker_color: e.target.value })}
                                 className="absolute -inset-2 cursor-pointer opacity-0"
                             />

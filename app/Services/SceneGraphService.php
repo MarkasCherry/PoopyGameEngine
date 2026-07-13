@@ -7,7 +7,10 @@ use App\Models\Scene;
 
 class SceneGraphService
 {
-    public function __construct(private SceneBackgroundResolver $backgrounds) {}
+    public function __construct(
+        private SceneBackgroundResolver $backgrounds,
+        private SceneMusicResolver $music,
+    ) {}
 
     /**
      * Flow map of a game: every scene with its visual preview data,
@@ -17,6 +20,7 @@ class SceneGraphService
     {
         $scenes = $game->scenes()->orderBy('position')->get();
         $backgrounds = $this->backgrounds->resolve($scenes);
+        $music = $this->music->resolve($scenes);
         $edges = [];
 
         foreach ($scenes as $scene) {
@@ -44,6 +48,7 @@ class SceneGraphService
                 'type' => $scene->type,
                 'position' => $scene->position,
                 'background' => $backgrounds[$scene->id] ?? null,
+                'resolved_music' => $music[$scene->id] ?? null,
                 'speakers' => $scene->type === 'dialogue' && ! empty($scene->data['character_id'])
                     ? [$scene->data['character_id']]
                     : [],

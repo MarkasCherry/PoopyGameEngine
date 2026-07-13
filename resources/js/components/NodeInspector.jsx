@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { Field, IconButton, Input, Select, TextArea, Toggle } from './ui';
 import { AssetField } from './AssetPicker';
 import { ColorInput, Button } from './ui';
@@ -29,8 +29,22 @@ function useInspectorWidth() {
     return { width, startResize };
 }
 
-export default function NodeInspector({ gameId, node, draft, status, retry, patchData, patchNode, characters, scenes, onDelete }) {
+export default function NodeInspector({ gameId, node, draft, status, retry, patchData, patchNode, characters, scenes, focusRequest, onDelete }) {
     const { width, startResize } = useInspectorWidth();
+    const [highlight, setHighlight] = useState(null);
+    const bgSectionRef = useRef(null);
+    const audioSectionRef = useRef(null);
+    const fxSectionRef = useRef(null);
+
+    useEffect(() => {
+        if (!focusRequest) return;
+        const el = { background: bgSectionRef.current, audio: audioSectionRef.current, effects: fxSectionRef.current }[focusRequest.section];
+        if (!el) return;
+        el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        setHighlight(focusRequest.section);
+        const t = setTimeout(() => setHighlight(null), 1400);
+        return () => clearTimeout(t);
+    }, [focusRequest]);
 
     return (
         <aside className="glass-deep relative flex shrink-0 flex-col border-l border-white/5" style={{ width }}>
@@ -68,7 +82,7 @@ export default function NodeInspector({ gameId, node, draft, status, retry, patc
                 )}
 
                 {draft.background && (
-                    <Section title="Background transition">
+                    <Section title="Background transition" innerRef={bgSectionRef} highlighted={highlight === 'background'}>
                         <Select
                             value={draft.background.transition ?? 'fade'}
                             onChange={(e) => patchNode({ background: { ...draft.background, transition: e.target.value } })}
@@ -80,7 +94,12 @@ export default function NodeInspector({ gameId, node, draft, status, retry, patc
                     </Section>
                 )}
 
-                <Section title="Background music" subtitle="Plays during this scene only. Otherwise the group's music continues.">
+                <Section
+                    title="Background music"
+                    subtitle="Plays during this scene only. Otherwise the group's music continues."
+                    innerRef={audioSectionRef}
+                    highlighted={highlight === 'audio'}
+                >
                     <Select
                         value={draft.audio ? draft.audio.action : ''}
                         onChange={(e) => {
@@ -118,7 +137,12 @@ export default function NodeInspector({ gameId, node, draft, status, retry, patc
                     )}
                 </Section>
 
-                <Section title="Effects" subtitle="Fire when this scene starts.">
+                <Section
+                    title="Effects"
+                    subtitle="Fire when this scene starts — shown on the timeline as cues at the cut."
+                    innerRef={fxSectionRef}
+                    highlighted={highlight === 'effects'}
+                >
                     <EffectsEditor gameId={gameId} effects={draft.effects ?? []} onChange={(effects) => patchNode({ effects })} />
                 </Section>
 
@@ -158,9 +182,12 @@ function SaveStatus({ status, retry }) {
     );
 }
 
-function Section({ title, subtitle, children }) {
+function Section({ title, subtitle, children, innerRef, highlighted }) {
     return (
-        <section className="space-y-2.5">
+        <section
+            ref={innerRef}
+            className={`space-y-2.5 rounded-xl transition ${highlighted ? '-m-2 bg-fuchsia-500/10 p-2 ring-2 ring-fuchsia-400/60' : ''}`}
+        >
             <div>
                 <h4 className="text-[10px] font-bold tracking-[0.18em] text-fuchsia-300/70 uppercase">{title}</h4>
                 {subtitle && <p className="mt-0.5 text-[11px] text-violet-300/40">{subtitle}</p>}

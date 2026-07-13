@@ -86,7 +86,7 @@ export function ColorInput({ value, onChange, allowEmpty = true }) {
             <div className="relative size-9 shrink-0 overflow-hidden rounded-lg border border-white/15 shadow-inner">
                 <input
                     type="color"
-                    value={value || '#a78bfa'}
+                    value={value || '#7b86f5'}
                     onChange={(e) => onChange(e.target.value)}
                     className="absolute -inset-2 size-14 cursor-pointer"
                 />
@@ -111,7 +111,7 @@ export function Toggle({ checked, onChange, label }) {
             className="flex cursor-pointer items-center gap-2.5 text-sm text-violet-100"
         >
             <span
-                className={`relative h-5.5 w-10 rounded-full transition ${checked ? 'bg-fuchsia-500 shadow-[0_0_12px_rgba(217,70,239,0.6)]' : 'bg-white/15'}`}
+                className={`relative h-5.5 w-10 rounded-full transition ${checked ? 'bg-fuchsia-500 shadow-[0_0_12px_rgba(88,101,242,0.6)]' : 'bg-white/15'}`}
             >
                 <span
                     className={`absolute top-0.5 size-4.5 rounded-full bg-white shadow transition-all ${checked ? 'left-5' : 'left-0.5'}`}
@@ -125,7 +125,7 @@ export function Toggle({ checked, onChange, label }) {
 export function EmptyState({ icon, title, subtitle, action }) {
     return (
         <div className="animate-rise flex flex-col items-center justify-center gap-3 py-16 text-center">
-            <div className="text-5xl drop-shadow-[0_0_20px_rgba(168,85,247,0.5)]">{icon}</div>
+            <div className="text-5xl drop-shadow-[0_0_20px_rgba(88,101,242,0.5)]">{icon}</div>
             <div className="text-lg font-semibold text-white">{title}</div>
             {subtitle && <div className="max-w-sm text-sm text-violet-300/60">{subtitle}</div>}
             {action && <div className="mt-2">{action}</div>}

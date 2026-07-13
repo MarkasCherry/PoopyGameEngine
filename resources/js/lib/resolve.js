@@ -13,7 +13,7 @@ export function resolveAppearance(characters, characterId, appearanceId) {
         appearance,
         image: appearance?.image_url ?? null,
         name: appearance?.display_name ?? character.display_name ?? character.name,
-        color: appearance?.text_color ?? character.text_color ?? '#c4b5fd',
+        color: appearance?.text_color ?? character.text_color ?? '#aeb6fb',
     };
 }
 
@@ -27,7 +27,7 @@ export function resolveSpeaker(characters, data) {
         appearance: null,
         image: null,
         name: data.speaker_name || null,
-        color: data.speaker_color || '#c4b5fd',
+        color: data.speaker_color || '#aeb6fb',
     };
 }
 

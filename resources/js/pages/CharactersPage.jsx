@@ -68,12 +68,12 @@ function CharacterCard({ character, index, onEdit }) {
                 )}
                 <div
                     className="absolute inset-x-0 bottom-0 h-16 opacity-60"
-                    style={{ background: `linear-gradient(to top, ${character.text_color ?? '#8b5cf6'}33, transparent)` }}
+                    style={{ background: `linear-gradient(to top, ${character.text_color ?? '#5865f2'}33, transparent)` }}
                 />
             </div>
             <div className="p-4">
                 <div className="mb-1 flex items-center gap-2">
-                    <span className="size-2.5 rounded-full" style={{ background: character.text_color ?? '#8b5cf6', boxShadow: `0 0 8px ${character.text_color ?? '#8b5cf6'}` }} />
+                    <span className="size-2.5 rounded-full" style={{ background: character.text_color ?? '#5865f2', boxShadow: `0 0 8px ${character.text_color ?? '#5865f2'}` }} />
                     <h2 className="truncate font-bold text-white">{character.name}</h2>
                 </div>
                 <div className="flex items-center gap-2">
@@ -87,7 +87,7 @@ function CharacterCard({ character, index, onEdit }) {
 
 function CharacterFormModal({ gameId, open, onClose }) {
     const createCharacter = useCreateCharacter(gameId);
-    const [form, setForm] = useState({ name: '', type: '', display_name: '', text_color: '#c4b5fd' });
+    const [form, setForm] = useState({ name: '', type: '', display_name: '', text_color: '#aeb6fb' });
     const [image, setImage] = useState(null);
     const patch = (p) => setForm((f) => ({ ...f, ...p }));
 
@@ -102,7 +102,7 @@ function CharacterFormModal({ gameId, open, onClose }) {
 
         createCharacter.mutate(formData, {
             onSuccess: () => {
-                setForm({ name: '', type: '', display_name: '', text_color: '#c4b5fd' });
+                setForm({ name: '', type: '', display_name: '', text_color: '#aeb6fb' });
                 setImage(null);
                 onClose();
             },

@@ -48,7 +48,7 @@ function MenuScreen({ game, resolveAsset, onStart, onExit, canStart }) {
 
             <div className="relative flex flex-col items-center gap-10 px-8 text-center">
                 <h1
-                    className="text-5xl font-bold text-white uppercase drop-shadow-[0_0_40px_rgba(217,70,239,0.5)] md:text-7xl"
+                    className="text-5xl font-bold text-white uppercase drop-shadow-[0_0_40px_rgba(88,101,242,0.5)] md:text-7xl"
                     style={{ animation: 'engine-title 1.4s cubic-bezier(0.22,1,0.36,1) both' }}
                 >
                     {game.game.title}
@@ -405,7 +405,7 @@ function ChoicePanel({ node, onPick }) {
                 <button
                     key={option.id}
                     onClick={(e) => { e.stopPropagation(); onPick(option); }}
-                    className="w-full max-w-md cursor-pointer rounded-2xl border border-white/15 bg-white/8 px-8 py-3.5 text-base font-semibold text-white backdrop-blur transition hover:scale-[1.02] hover:border-fuchsia-300/60 hover:bg-fuchsia-500/20 hover:shadow-[0_0_30px_rgba(217,70,239,0.35)]"
+                    className="w-full max-w-md cursor-pointer rounded-2xl border border-white/15 bg-white/8 px-8 py-3.5 text-base font-semibold text-white backdrop-blur transition hover:scale-[1.02] hover:border-fuchsia-300/60 hover:bg-fuchsia-500/20 hover:shadow-[0_0_30px_rgba(88,101,242,0.35)]"
                     style={{ animation: `engine-bg-fade 0.4s ${0.12 * (i + 1)}s both` }}
                 >
                     {option.text}

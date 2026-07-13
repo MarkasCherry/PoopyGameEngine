@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useParams, useSearchParams } from 'react-router-dom';
 import {
     useCharacters, useCreateScene, useDeleteScene, useDuplicateScene,
@@ -18,6 +18,7 @@ export default function ScenesPage() {
     const { data: scenes, isLoading } = useScenes(gameId);
     const { data: mapData } = useGameMap(gameId);
     const { data: characters } = useCharacters(gameId);
+    const [focusRequest, setFocusRequest] = useState(null);
 
     const createScene = useCreateScene(gameId);
     const updateScene = useUpdateScene(gameId);
@@ -44,6 +45,7 @@ export default function ScenesPage() {
         .sort((a, b) => a.position - b.position);
 
     const backgrounds = Object.fromEntries((mapData?.scenes ?? []).map((s) => [s.id, s.background]));
+    const music = Object.fromEntries((mapData?.scenes ?? []).map((s) => [s.id, s.resolved_music]));
 
     if (isLoading) return <Spinner />;
 
@@ -67,70 +69,77 @@ export default function ScenesPage() {
     };
 
     return (
-        <div className="flex h-full">
-            <SceneTree
-                gameId={gameId}
-                scenes={scenes ?? []}
-                mapData={mapData}
-                selectedId={selectedSceneId}
-                onSelect={selectScene}
-                onCreate={createHandler}
-                onRename={(sceneId, title) => title.trim() && updateScene.mutate({ sceneId, title })}
-                onMove={(sceneId, parentId) => updateScene.mutate({ sceneId, parent_id: parentId })}
-                onReorder={(ids) => reorderScenes.mutate(ids)}
-                onDuplicate={(sceneId) => duplicateScene.mutate(sceneId, { onSuccess: (scene) => selectScene(scene.id) })}
-                onDelete={removeScene}
-            />
-
-            {selected && (
-                <Timeline
+        <div className="flex h-full flex-col">
+            <div className="flex min-h-0 flex-1">
+                <SceneTree
                     gameId={gameId}
-                    groupTitle={group?.title ?? 'Top level'}
-                    scenes={siblings}
-                    backgrounds={backgrounds}
-                    characters={characters ?? []}
-                    selectedId={selectedSceneId}
-                    onSelect={selectScene}
-                    onReorder={(ids) => reorderScenes.mutate(ids)}
-                    onAdd={(kind) =>
-                        createHandler(groupId, null, false, { type: kind.type, data: kind.defaults })}
-                    onDelete={removeScene}
-                />
-            )}
-
-            {selected?.is_group ? (
-                <GroupPanel
-                    key={selected.id}
-                    gameId={gameId}
-                    scene={selected}
                     scenes={scenes ?? []}
                     mapData={mapData}
+                    selectedId={selectedSceneId}
                     onSelect={selectScene}
                     onCreate={createHandler}
-                    onRename={(title) => updateScene.mutate({ sceneId: selected.id, title })}
-                    onSetBackground={(path) =>
-                        updateScene.mutate({
-                            sceneId: selected.id,
-                            background: path ? { asset_path: path, transition: 'fade' } : null,
-                        })}
-                    onSetAudio={(audio) => updateScene.mutate({ sceneId: selected.id, audio })}
+                    onRename={(sceneId, title) => title.trim() && updateScene.mutate({ sceneId, title })}
+                    onMove={(sceneId, parentId) => updateScene.mutate({ sceneId, parent_id: parentId })}
+                    onReorder={(ids) => reorderScenes.mutate(ids)}
+                    onDuplicate={(sceneId) => duplicateScene.mutate(sceneId, { onSuccess: (scene) => selectScene(scene.id) })}
+                    onDelete={removeScene}
                 />
-            ) : selected ? (
-                <SceneStudio
-                    key={selected.id}
-                    gameId={gameId}
-                    scene={selected}
-                    scenes={scenes ?? []}
-                    characters={characters ?? []}
-                    backgrounds={backgrounds}
-                    onDelete={() => removeScene(selected.id)}
-                />
-            ) : (
-                <div className="flex-1">
-                    <EmptyState
-                        icon="✨"
-                        title="Create your first scene"
-                        subtitle="Scenes are single story moments — one line, one choice, one video. Group them into chapters and episodes."
+
+                {selected?.is_group ? (
+                    <GroupPanel
+                        key={selected.id}
+                        gameId={gameId}
+                        scene={selected}
+                        scenes={scenes ?? []}
+                        mapData={mapData}
+                        onSelect={selectScene}
+                        onCreate={createHandler}
+                        onRename={(title) => updateScene.mutate({ sceneId: selected.id, title })}
+                        onSetBackground={(path) =>
+                            updateScene.mutate({
+                                sceneId: selected.id,
+                                background: path ? { asset_path: path, transition: 'fade' } : null,
+                            })}
+                        onSetAudio={(audio) => updateScene.mutate({ sceneId: selected.id, audio })}
+                    />
+                ) : selected ? (
+                    <SceneStudio
+                        key={selected.id}
+                        gameId={gameId}
+                        scene={selected}
+                        scenes={scenes ?? []}
+                        characters={characters ?? []}
+                        backgrounds={backgrounds}
+                        focusRequest={focusRequest}
+                        onDelete={() => removeScene(selected.id)}
+                    />
+                ) : (
+                    <div className="flex-1">
+                        <EmptyState
+                            icon="✨"
+                            title="Create your first scene"
+                            subtitle="Scenes are single story moments — one line, one choice, one video. Group them into chapters and episodes."
+                        />
+                    </div>
+                )}
+            </div>
+
+            {selected && (
+                <div className="p-3 pt-0">
+                    <Timeline
+                        gameId={gameId}
+                        groupTitle={group?.title ?? 'Top level'}
+                        scenes={siblings}
+                        backgrounds={backgrounds}
+                        music={music}
+                        characters={characters ?? []}
+                        selectedId={selectedSceneId}
+                        onSelect={selectScene}
+                        onReorder={(ids) => reorderScenes.mutate(ids)}
+                        onAdd={(kind) =>
+                            createHandler(groupId, null, false, { type: kind.type, data: kind.defaults })}
+                        onDelete={removeScene}
+                        onFocusSection={(sceneId, section) => setFocusRequest({ sceneId, section, nonce: Date.now() })}
                     />
                 </div>
             )}
@@ -138,7 +147,7 @@ export default function ScenesPage() {
     );
 }
 
-function SceneStudio({ gameId, scene, scenes, characters, backgrounds, onDelete }) {
+function SceneStudio({ gameId, scene, scenes, characters, backgrounds, focusRequest, onDelete }) {
     const { draft, status, patchData, patchNode, retry } = useSceneDraft(scene, gameId);
 
     if (!draft) return null;
@@ -176,6 +185,7 @@ function SceneStudio({ gameId, scene, scenes, characters, backgrounds, onDelete 
                 patchNode={patchNode}
                 characters={characters}
                 scenes={scenes}
+                focusRequest={focusRequest?.sceneId === scene.id ? focusRequest : null}
                 onDelete={onDelete}
             />
         </>

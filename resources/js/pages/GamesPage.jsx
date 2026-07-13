@@ -48,7 +48,6 @@ function GameCard({ game, index }) {
             className="glass card-lift animate-rise group relative block overflow-hidden rounded-2xl p-6"
             style={{ animationDelay: `${index * 60}ms` }}
         >
-            <div className="absolute -top-10 -right-10 size-32 rounded-full bg-gradient-to-br from-violet-600/30 to-fuchsia-600/20 blur-2xl transition group-hover:scale-125" />
             <div className="relative">
                 <h2 className="mb-1 text-xl font-bold text-white">{game.title}</h2>
                 <p className="mb-4 line-clamp-2 min-h-10 text-sm text-violet-300/60">

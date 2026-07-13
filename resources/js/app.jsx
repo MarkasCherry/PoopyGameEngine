@@ -19,7 +19,6 @@ function App() {
     return (
         <QueryClientProvider client={queryClient}>
             <BrowserRouter>
-                <div className="aurora"><i /></div>
                 <Routes>
                     <Route path="/" element={<GamesPage />} />
                     <Route path="/games/:gameId/play" element={<PlayPage />} />

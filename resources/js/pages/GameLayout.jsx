@@ -3,10 +3,10 @@ import { Link, NavLink, Outlet, useParams } from 'react-router-dom';
 import { useAssets, useCharacters, useExportGame, useGame } from '../api/hooks';
 
 const NAV = [
-    { to: 'scenes', label: 'Studio', icon: '🎬' },
-    { to: 'map', label: 'Story Map', icon: '🗺️' },
-    { to: 'characters', label: 'Characters', icon: '🎭' },
-    { to: 'assets', label: 'Assets', icon: '🗂️' },
+    { to: 'scenes', label: 'Story' },
+    { to: 'map', label: 'Map' },
+    { to: 'characters', label: 'Cast' },
+    { to: 'assets', label: 'Assets' },
 ];
 
 function usePreloadImages(gameId) {
@@ -34,54 +34,50 @@ export default function GameLayout() {
     usePreloadImages(gameId);
 
     return (
-        <div className="flex h-screen">
-            <aside className="glass-deep z-10 flex w-60 shrink-0 flex-col border-r border-white/5 p-4">
-                <Link to="/" className="group mb-1 flex items-center gap-2 rounded-xl px-3 py-2 text-sm text-violet-300/70 transition hover:bg-white/5 hover:text-white">
-                    <span className="transition group-hover:-translate-x-0.5">←</span> All games
+        <div className="flex h-screen flex-col">
+            <header className="flex h-14 shrink-0 items-center gap-5 border-b border-white/5 px-4">
+                <Link to="/" className="group flex items-center gap-2 text-violet-300/60 transition hover:text-white" title="All games">
+                    <span className="transition group-hover:-translate-x-0.5">←</span>
                 </Link>
-                <div className="mb-6 px-3">
-                    <h1 className="text-gradient truncate text-xl font-bold tracking-tight" title={game?.title}>
-                        {game?.title ?? '…'}
-                    </h1>
+
+                <div className="min-w-0 leading-tight">
+                    <h1 className="truncate text-sm font-bold text-white" title={game?.title}>{game?.title ?? '…'}</h1>
+                    <p className="truncate text-[10px] text-violet-300/40">games/{game?.slug}/game.json</p>
                 </div>
-                <nav className="flex flex-col gap-1">
+
+                <nav className="mx-auto flex gap-0.5 rounded-xl bg-ink-900 p-1">
                     {NAV.map((item) => (
                         <NavLink
                             key={item.to}
                             to={item.to}
                             className={({ isActive }) =>
-                                `flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-semibold transition ${
-                                    isActive
-                                        ? 'bg-gradient-to-r from-violet-600/40 to-fuchsia-600/25 text-white shadow-[inset_0_1px_0_rgba(255,255,255,0.1),0_4px_16px_rgba(139,92,246,0.25)]'
-                                        : 'text-violet-300/70 hover:bg-white/5 hover:text-white'
+                                `rounded-lg px-4 py-1.5 text-xs font-semibold transition ${
+                                    isActive ? 'bg-ink-800 text-white' : 'text-violet-300/60 hover:text-white'
                                 }`
                             }
                         >
-                            <span className="text-base">{item.icon}</span>
                             {item.label}
                         </NavLink>
                     ))}
                 </nav>
-                <div className="mt-auto space-y-2">
-                    <Link
-                        to={`/games/${gameId}/play`}
-                        className="btn-glow flex w-full items-center justify-center gap-2 rounded-xl px-3 py-2.5 text-sm font-bold text-white"
-                    >
-                        ▶ Play game
-                    </Link>
+
+                <div className="flex shrink-0 items-center gap-2">
                     <button
                         onClick={() => exportGame.mutate()}
                         disabled={exportGame.isPending}
-                        className="glass w-full cursor-pointer rounded-xl px-3 py-2.5 text-sm font-semibold text-cyan-200 transition hover:border-cyan-300/40 hover:bg-cyan-400/10 disabled:opacity-50"
+                        className="glass cursor-pointer rounded-lg px-3 py-1.5 text-xs font-semibold text-violet-100 transition hover:border-white/20 disabled:opacity-50"
                     >
-                        {exportGame.isPending ? 'Exporting…' : exportGame.isSuccess ? '✓ game.json written' : '⇩ Export game.json'}
+                        {exportGame.isPending ? 'Exporting…' : exportGame.isSuccess ? '✓ Exported' : 'Export game.json'}
                     </button>
-                    <div className="px-2 text-center text-[10px] text-violet-300/30">
-                        games/{game?.slug}/game.json
-                    </div>
+                    <Link
+                        to={`/games/${gameId}/play`}
+                        className="btn-glow flex items-center gap-1.5 rounded-lg px-3 py-1.5 text-xs font-bold"
+                    >
+                        ▷ Play
+                    </Link>
                 </div>
-            </aside>
-            <main className="min-w-0 flex-1 overflow-y-auto">
+            </header>
+            <main className="min-h-0 flex-1 overflow-y-auto">
                 <Outlet />
             </main>
         </div>

@@ -150,8 +150,8 @@ function TreeRow({
                 className={`group flex cursor-pointer items-center gap-1.5 rounded-xl border py-1.5 pr-1 pl-1.5 transition ${
                     active
                         ? isGroup
-                            ? 'border-amber-400/40 bg-gradient-to-r from-amber-500/20 to-orange-500/10 shadow-[0_4px_20px_rgba(251,191,36,0.15)]'
-                            : 'border-fuchsia-400/40 bg-gradient-to-r from-violet-600/30 to-fuchsia-600/15 shadow-[0_4px_20px_rgba(139,92,246,0.25)]'
+                            ? 'border-amber-400/40 bg-amber-400/10'
+                            : 'border-fuchsia-400/50 bg-fuchsia-500/10'
                         : isGroup
                             ? 'border-amber-300/15 bg-amber-400/[0.04] hover:border-amber-300/30 hover:bg-amber-400/10'
                             : 'border-transparent hover:border-white/10 hover:bg-white/5'

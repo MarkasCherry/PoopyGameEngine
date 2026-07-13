@@ -77,7 +77,7 @@ export default function PlayPage() {
                 <h1 className="text-xl font-bold tracking-[0.3em] text-white/80 uppercase">{game?.game.title ?? 'Loading'}</h1>
                 <div className="h-1 w-64 overflow-hidden rounded-full bg-white/10">
                     <div
-                        className="h-full rounded-full bg-gradient-to-r from-violet-500 via-fuchsia-500 to-pink-500 transition-all duration-300"
+                        className="h-full rounded-full bg-fuchsia-500 transition-all duration-300"
                         style={{ width: `${total ? progress : 20}%` }}
                     />
                 </div>
